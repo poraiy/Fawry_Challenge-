@@ -1,16 +1,20 @@
+// please read my comments 
+
+
+
 
 // we have three types of books each type have some data and if it is for sale and if we can buy it 
-// 
+// add books    ,  remove outdated  , buy books (if is for sale , purchase)  all in  store class 
 
 
 
 
-#include <iostream>
-#include <vector>
-#include <memory>
 #include <unordered_map>
 #include <stdexcept>
 #include <ctime>
+#include <iostream>
+#include <vector>
+#include <memory>
 
 using namespace std;
 //1 
@@ -46,7 +50,7 @@ public:
 
 //3
 //الكتاب الورقى  :  و المعلومة الاضافية هيا الكمية المتاحة من الكتاب الورقى    و الى على اساسها بنحدد هل ينفع نشترية و لا لا لان المستقدم مش هيشترى كتاب المستخدم هيشترى كمية كتب 
-// الكتابمن النوع ده قابل للبيع 
+// الكتاب من النوع ده قابل للبيع 
 // عملية الشراء ناجهة لو الكمية الى عايز اشتريها كا مستخدم اقل من الكمية المتاحة 
 // inherited of book class
 class PaperBook : public Book {
@@ -116,7 +120,7 @@ public:
 // the store class which has inventory which contain all books added by addBook function 
 // and  have removeOutdatedBooks function which responsible for deleting all outdated books from inventory 
 class QuantumBookstore {
-    unordered_map<string, shared_ptr<Book>> inventory;
+    unordered_map<string, shared_ptr<Book>> inventory; 
 
 public:
 // المستخدم هيضيف مجموعة مت الكتب و بانواها المختلفة 
@@ -143,12 +147,12 @@ public:
         if (inventory.find(isbn) == inventory.end())    // if book is not found  
             throw runtime_error("Book not found!");
 
-        shared_ptr<Book> book = inventory[isbn];       // 
+        shared_ptr<Book> book = inventory[isbn];       // بنعرف الكتاب من ال اى دى اى بتاعه 
 
-        if (!book->isForSale())
+        if (!book->isForSale())                       //  بشوف الكتاب قابل للبيع و لا  و ده بيتحدد على حسب نوع الكتاب 
             throw runtime_error("Book is not for sale!");
 
-        book->purchase(quantity, email, address);
+        book->purchase(quantity, email, address);   //  عملية الشراء برضو بتحصل بناءا على  نوع البيانات 
     }
 };
 
@@ -160,21 +164,21 @@ public:
 class QuantumBookstoreFullTest {
 public:
     static void run() {
-        QuantumBookstore store;
+        QuantumBookstore store;                                              // make object of store 
 
-        store.addBook(make_shared<PaperBook>("001", "C++ Primer", "Lippman", 2010, 50.0, 10));
-        store.addBook(make_shared<EBook>("002", "Learn Python", "Guido", 2015, 30.0, "PDF"));
-        store.addBook(make_shared<ShowcaseBook>("003", "Ancient Scripts", "Unknown", 1800));
+        store.addBook(make_shared<PaperBook>("001", "atomic habit", "nour", 2010, 50.0, 10));  // add book of type PaperBook
+        store.addBook(make_shared<EBook>("002", "cracking interview", "Guido", 2015, 700.0, "PDF"));  // add book of type EBook
+        store.addBook(make_shared<ShowcaseBook>("003", "english words", "Unknown", 1800));  // add book of type ShowcaseBook
 
         try {
-            store.buyBook("001", 2, "user@example.com", "123 Main St");
-            store.buyBook("002", 1, "user@example.com", "");
-            store.buyBook("003", 1, "user@example.com", "123 Main St"); // Will throw
+            store.buyBook("001", 2, "nwrhanm958@gmail.com", "el stade ");   // buy a PaperBook 
+            store.buyBook("002", 1, "nwrhanm958@gmail.com", "");              // buy a EBook 
+            store.buyBook("003", 1, "nwrhanm958@gmail.com", "el-stade");   //  buy a ShowcaseBook
         } catch (exception& e) {
             print(string("Error: ") + e.what());
         }
 
-        auto removed = store.removeOutdatedBooks(50);
+        auto removed = store.removeOutdatedBooks(50);      // removing out dated  books 
         for (auto& book : removed) {
             print("Removed outdated book: " + book->getISBN());
         }
